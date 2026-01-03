@@ -7,14 +7,11 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 import App from './App';
 import { createApolloClient } from './apollo-client';
 import { useAuth0 } from '@auth0/auth0-react';
-// Import GraphQLError to ensure it's included in the bundle
-// @ts-expect-error
-import { GraphQLError } from 'graphql';
 
 const ApolloWrapper = ({ children }: { children: React.ReactNode }) => {
     const { getAccessTokenSilently } = useAuth0();
 
-    // Memory-ize the client so it's not recreated on every render
+    // Memoize the client so it's not recreated on every render
     const client = useMemo(() => {
         return createApolloClient(getAccessTokenSilently);
     }, [getAccessTokenSilently]);
@@ -25,7 +22,7 @@ const ApolloWrapper = ({ children }: { children: React.ReactNode }) => {
 const Auth0ProviderWithHistory = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
 
-    const onRedirectCallback = (appState?: AppState) => {
+    const onRedirectCallback = () => {
         // Always navigate to the clean /dashboard path after login
         // to strip the ?code=... and ?state=... params from the URL
         navigate('/dashboard', { replace: true });

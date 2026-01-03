@@ -1,23 +1,44 @@
 /// <reference types="vite/client" />
 
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-// Import GraphQLError to ensure it's included in the bundle for instanceof checks
-// @ts-ignore
-import { GraphQLError } from 'graphql';
+import { onError } from '@apollo/client/link/error';
 
 const httpLink = createHttpLink({
     uri: import.meta.env.VITE_API_URL || 'http://localhost:3000/graphql',
 });
 
+// Error handling link
+const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
+    if (graphQLErrors) {
+        graphQLErrors.forEach(({ message, locations, path }) => {
+            if (import.meta.env.DEV) {
+                console.error(
+                    `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}, Operation: ${operation.operationName}`
+                );
+            }
+        });
+    }
+
+    if (networkError) {
+        if (import.meta.env.DEV) {
+            console.error(`[Network error]: ${networkError}, Operation: ${operation.operationName}`);
+        }
+    }
+});
+
 export const createApolloClient = (getAccessTokenSilently: () => Promise<string>) => {
     const authLink = setContext(async (operation, { headers }) => {
         try {
-            console.log(`Getting access token for GraphQL operation: ${operation.operationName}`);
+            if (import.meta.env.DEV) {
+                console.log(`Getting access token for GraphQL operation: ${operation.operationName}`);
+            }
             const token = await getAccessTokenSilently();
 
             if (!token) {
-                console.warn('No access token returned from getAccessTokenSilently');
+                if (import.meta.env.DEV) {
+                    console.warn('No access token returned from getAccessTokenSilently');
+                }
             }
 
             return {
@@ -27,11 +48,13 @@ export const createApolloClient = (getAccessTokenSilently: () => Promise<string>
                 },
             };
         } catch (error: any) {
-            console.error('Error getting access token in Apollo link:', error);
+            if (import.meta.env.DEV) {
+                console.error('Error getting access token in Apollo link:', error);
 
-            // If it's a login_required error, we might want to log it specifically
-            if (error.error === 'login_required' || error.error === 'consent_required') {
-                console.error('Auth0 session expired or consent required');
+                // If it's a login_required error, we might want to log it specifically
+                if (error.error === 'login_required' || error.error === 'consent_required') {
+                    console.error('Auth0 session expired or consent required');
+                }
             }
 
             return { headers };
@@ -39,13 +62,13 @@ export const createApolloClient = (getAccessTokenSilently: () => Promise<string>
     });
 
     return new ApolloClient({
-        link: authLink.concat(httpLink),
+        link: from([errorLink, authLink, httpLink]),
         cache: new InMemoryCache({
             typePolicies: {
                 Query: {
                     fields: {
                         books: {
-                            merge(_existing, incoming) {
+                            merge(existing = [], incoming: any[]) {
                                 return incoming;
                             },
                         },
@@ -53,5 +76,16 @@ export const createApolloClient = (getAccessTokenSilently: () => Promise<string>
                 },
             },
         }),
+        defaultOptions: {
+            watchQuery: {
+                errorPolicy: 'all',
+            },
+            query: {
+                errorPolicy: 'all',
+            },
+            mutate: {
+                errorPolicy: 'all',
+            },
+        },
     });
 };

@@ -12,8 +12,11 @@ export class BooksService {
         private booksRepository: Repository<Book>,
     ) { }
 
-    async findAll(): Promise<Book[]> {
-        return this.booksRepository.find();
+    async findAll(skip?: number, take?: number): Promise<Book[]> {
+        return this.booksRepository.find({
+            skip,
+            take,
+        });
     }
 
     async findOne(id: number): Promise<Book> {

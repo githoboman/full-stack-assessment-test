@@ -6,13 +6,13 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 export class Book {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Field()
     @Column()
-    name: string;
+    name!: string;
 
     @Field()
     @Column()
-    description: string;
+    description!: string;
 }

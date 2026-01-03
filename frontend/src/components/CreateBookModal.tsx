@@ -77,6 +77,7 @@ export const CreateBookModal = ({ isOpen, onClose }: CreateBookModalProps) => {
                                     placeholder="Book name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                    isDisabled={loading}
                                 />
                             </FormControl>
 
@@ -87,6 +88,7 @@ export const CreateBookModal = ({ isOpen, onClose }: CreateBookModalProps) => {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     rows={4}
+                                    isDisabled={loading}
                                 />
                             </FormControl>
 

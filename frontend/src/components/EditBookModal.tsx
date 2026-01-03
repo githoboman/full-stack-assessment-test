@@ -95,6 +95,7 @@ export const EditBookModal = ({ isOpen, onClose, book }: EditBookModalProps) => 
                                     placeholder="Book name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                    isDisabled={loading}
                                 />
                             </FormControl>
 
@@ -105,6 +106,7 @@ export const EditBookModal = ({ isOpen, onClose, book }: EditBookModalProps) => 
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     rows={4}
+                                    isDisabled={loading}
                                 />
                             </FormControl>
 

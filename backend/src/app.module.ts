@@ -14,24 +14,24 @@ export class AppController {
 }
 
 @Module({
+    controllers: [AppController],
     imports: [
         // GraphQL configuration
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,
             playground: true,
-            context: ({ req }) => {
-                console.log('GraphQL context created for request:', req.url);
-                return { req };
-            },
+            context: ({ req }: { req: any }) => ({ req }),
         }),
 
         // Database configuration
         TypeOrmModule.forRoot({
-            type: 'sqlite',
-            database: 'database.sqlite',
+            type: process.env.DATABASE_URL ? 'postgres' : 'sqlite',
+            database: process.env.DATABASE_URL ? undefined : 'database.sqlite',
+            url: process.env.DATABASE_URL,
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
-            synchronize: true, // Auto-create schema (disable in production)
+            synchronize: process.env.NODE_ENV !== 'production',
+            logging: process.env.NODE_ENV === 'development',
         }),
 
         AuthModule,

@@ -12,8 +12,11 @@ export class BooksResolver {
     constructor(private readonly booksService: BooksService) { }
 
     @Query(() => [Book], { name: 'books' })
-    async findAll(): Promise<Book[]> {
-        return this.booksService.findAll();
+    async findAll(
+        @Args('skip', { type: () => Int, nullable: true }) skip?: number,
+        @Args('take', { type: () => Int, nullable: true }) take?: number,
+    ): Promise<Book[]> {
+        return this.booksService.findAll(skip, take);
     }
 
     @Query(() => Book, { name: 'book' })

@@ -19,13 +19,14 @@ import {
     AlertDialogContent,
     AlertDialogOverlay,
     Button,
+    VStack,
 } from '@chakra-ui/react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_BOOKS } from '../graphql/queries';
 import { DELETE_BOOK } from '../graphql/mutations';
 import { EditBookModal } from './EditBookModal';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface Book {
     id: number;
@@ -34,12 +35,25 @@ interface Book {
 }
 
 export const BookTable = () => {
-    const { data, loading, error } = useQuery(GET_BOOKS);
+    const { data, loading, error, refetch } = useQuery(GET_BOOKS, {
+        fetchPolicy: 'network-only',
+        notifyOnNetworkStatusChange: true,
+    });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const [bookToDelete, setBookToDelete] = useState<number | null>(null);
     const cancelRef = useRef(null);
     const toast = useToast();
+
+    useEffect(() => {
+        if (error) {
+            console.error('Query error details:', {
+                message: error.message,
+                graphQLErrors: error.graphQLErrors,
+                networkError: error.networkError,
+            });
+        }
+    }, [error]);
 
     const [deleteBook] = useMutation(DELETE_BOOK, {
         refetchQueries: [{ query: GET_BOOKS }],
@@ -88,10 +102,19 @@ export const BookTable = () => {
     }
 
     if (error) {
-        console.error('GraphQL error loading books:', error);
         return (
             <Center py={10}>
-                <Text color="red.500">Error loading books: {error.message}</Text>
+                <VStack spacing={4}>
+                    <Text color="red.500" fontSize="lg" fontWeight="bold">
+                        Error loading books
+                    </Text>
+                    <Text color="gray.600" fontSize="sm">
+                        {error.message}
+                    </Text>
+                    <Button colorScheme="blue" onClick={() => refetch()}>
+                        Try Again
+                    </Button>
+                </VStack>
             </Center>
         );
     }
