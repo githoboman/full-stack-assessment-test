@@ -88,6 +88,7 @@ export const BookTable = () => {
     }
 
     if (error) {
+        console.error('GraphQL error loading books:', error);
         return (
             <Center py={10}>
                 <Text color="red.500">Error loading books: {error.message}</Text>

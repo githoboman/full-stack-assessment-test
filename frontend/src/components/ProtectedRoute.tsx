@@ -7,7 +7,9 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-    const { isAuthenticated, isLoading } = useAuth0();
+    const { isAuthenticated, isLoading, user } = useAuth0();
+
+    console.log('ProtectedRoute: isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'user:', user);
 
     if (isLoading) {
         return (
@@ -18,6 +20,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     }
 
     if (!isAuthenticated) {
+        console.log('Not authenticated, redirecting to /');
         return <Navigate to="/" replace />;
     }
 

@@ -10,6 +10,7 @@ export const createApolloClient = (getAccessTokenSilently: () => Promise<string>
     const authLink = setContext(async (_, { headers }) => {
         try {
             const token = await getAccessTokenSilently();
+            console.log('Access token obtained:', token ? 'Yes' : 'No');
             return {
                 headers: {
                     ...headers,
