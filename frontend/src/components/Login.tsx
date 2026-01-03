@@ -26,7 +26,15 @@ export const Login = () => {
                     <Button
                         colorScheme="blue"
                         size="lg"
-                        onClick={() => loginWithRedirect()}
+                        onClick={() => {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            loginWithRedirect({
+                                authorizationParams: {
+                                    prompt: 'login'
+                                }
+                            });
+                        }}
                         px={10}
                     >
                         Sign In with Auth0
