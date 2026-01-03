@@ -1,5 +1,10 @@
+/// <reference types="vite/client" />
+
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+// Import GraphQLError to ensure it's included in the bundle for instanceof checks
+// @ts-ignore
+import { GraphQLError } from 'graphql';
 
 const httpLink = createHttpLink({
     uri: import.meta.env.VITE_API_URL || 'http://localhost:3000/graphql',

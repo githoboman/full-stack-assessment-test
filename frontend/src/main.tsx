@@ -7,6 +7,9 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 import App from './App';
 import { createApolloClient } from './apollo-client';
 import { useAuth0 } from '@auth0/auth0-react';
+// Import GraphQLError to ensure it's included in the bundle
+// @ts-expect-error
+import { GraphQLError } from 'graphql';
 
 const ApolloWrapper = ({ children }: { children: React.ReactNode }) => {
     const { getAccessTokenSilently } = useAuth0();
