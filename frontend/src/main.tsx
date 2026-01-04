@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Auth0Provider, AppState } from '@auth0/auth0-react';
+import { Auth0Provider } from '@auth0/auth0-react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter, useNavigate } from 'react-router-dom';

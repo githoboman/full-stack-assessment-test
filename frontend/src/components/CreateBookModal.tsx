@@ -30,7 +30,8 @@ export const CreateBookModal = ({ isOpen, onClose }: CreateBookModalProps) => {
 
     const [createBook, { loading }] = useMutation(CREATE_BOOK, {
         refetchQueries: [{ query: GET_BOOKS }],
-        onCompleted: () => {
+        onCompleted: (data) => {
+            console.log('Mutation completed. Data:', data);
             toast({
                 title: 'Book created',
                 description: 'The book has been created successfully.',

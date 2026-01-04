@@ -168,6 +168,27 @@ The SQLite database is stored in `backend/database.sqlite` and is committed to t
 └── README.md
 ```
 
+## Troubleshooting
+
+### Common Errors
+
+#### 1. JWT validation error: `getaddrinfo ENOTFOUND undefined`
+*   **Cause**: The backend is not loading environment variables correctly, so `AUTH0_DOMAIN` is undefined.
+*   **Solution**: Ensure `ConfigModule.forRoot({ isGlobal: true })` is imported in `app.module.ts`. Verify your `backend/.env` file exists and contains `AUTH0_DOMAIN`.
+
+#### 2. `Invalid token` or 401 Unauthorized
+*   **Cause**: Mismatch between the token's audience/issuer and the backend's expected configuration.
+*   **Solution**:
+    *   Ensure `VITE_AUTH0_AUDIENCE` in `frontend/.env` matches `AUTH0_AUDIENCE` in `backend/.env`.
+    *   Ensure `VITE_AUTH0_DOMAIN` matches `AUTH0_DOMAIN`.
+    *   Restart the backend if you change `.env` files.
+
+#### 3. `EADDRINUSE: address already in use :::3000`
+*   **Cause**: The backend port 3000 is occupied by a stuck process (e.g., a previous run that didn't exit cleanly).
+*   **Solution**:
+    *   **Windows**: Run `netstat -ano | findstr :3000` to find the PID, then `taskkill /PID <PID> /F`.
+    *   **Mac/Linux**: Run `lsof -i :3000`, then `kill -9 <PID>`.
+
 ## License
 
 MIT
