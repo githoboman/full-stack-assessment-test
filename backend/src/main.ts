@@ -15,6 +15,7 @@ async function bootstrap() {
   // Enable CORS for frontend access
   const allowedOrigins = [
     "http://localhost:5173",
+    "https://full-stack-assessment-test.vercel.app",
     ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
   ].filter(Boolean);
 
