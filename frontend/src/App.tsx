@@ -4,12 +4,10 @@ import { BooksDashboard } from './components/BooksDashboard';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 import { AuroraBackground } from './components/ui/aurora-background';
-import { ThemeToggle } from './components/ThemeToggle';
 
 function App() {
     return (
         <AuroraBackground>
-            <ThemeToggle />
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route

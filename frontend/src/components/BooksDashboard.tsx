@@ -11,6 +11,7 @@ import {
 import { FiPlus, FiLogOut } from 'react-icons/fi';
 import { BookTable } from './BookTable';
 import { CreateBookModal } from './CreateBookModal';
+import { ThemeToggle } from './ThemeToggle';
 
 export const BooksDashboard = () => {
     const { logout, user } = useAuth0();
@@ -52,6 +53,7 @@ export const BooksDashboard = () => {
                             >
                                 Sign Out
                             </Button>
+                            <ThemeToggle size="sm" />
                         </HStack>
                     </HStack>
                     {user && (

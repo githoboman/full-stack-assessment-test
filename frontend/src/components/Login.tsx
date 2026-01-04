@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Box, Button, Container, Heading, Text, VStack, Icon } from '@chakra-ui/react';
 import { FiBook } from 'react-icons/fi';
+import { ThemeToggle } from './ThemeToggle';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +17,7 @@ export const Login = () => {
 
     return (
         <Box minH="100vh" bg="transparent" display="flex" alignItems="center" justifyContent="center">
+            <ThemeToggle className="fixed top-4 right-4 z-50" />
             <Container maxW="md" textAlign="center">
                 <Box bg="whiteAlpha.800" _dark={{ bg: 'blackAlpha.800' }} p={10} borderRadius="xl" shadow="2xl" backdropFilter="blur(10px)">
                     <VStack spacing={8}>

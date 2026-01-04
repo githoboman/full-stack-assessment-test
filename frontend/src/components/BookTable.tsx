@@ -136,18 +136,18 @@ export const BookTable = () => {
             <Table variant="simple">
                 <Thead>
                     <Tr>
-                        <Th>ID</Th>
-                        <Th>Name</Th>
-                        <Th>Description</Th>
-                        <Th>Actions</Th>
+                        <Th color="gray.600" _dark={{ color: 'gray.400' }}>ID</Th>
+                        <Th color="gray.600" _dark={{ color: 'gray.400' }}>Name</Th>
+                        <Th color="gray.600" _dark={{ color: 'gray.400' }}>Description</Th>
+                        <Th color="gray.600" _dark={{ color: 'gray.400' }}>Actions</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
                     {books.map((book: Book) => (
                         <Tr key={book.id}>
-                            <Td>{book.id}</Td>
-                            <Td fontWeight="medium">{book.name}</Td>
-                            <Td color="gray.600">{book.description}</Td>
+                            <Td color="gray.700" _dark={{ color: 'gray.300' }}>{book.id}</Td>
+                            <Td fontWeight="medium" color="gray.900" _dark={{ color: 'white' }}>{book.name}</Td>
+                            <Td color="gray.600" _dark={{ color: 'gray.400' }}>{book.description}</Td>
                             <Td>
                                 <HStack spacing={2}>
                                     <IconButton
